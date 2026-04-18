@@ -19,7 +19,9 @@ Chart.js (Analytics charts)
 Binance API (Market data)  
 WebSockets (Real-time updates)  
 OpenRouter API (AI chatbot)
+
 ---
+
 ## Project Modules:
 ### 1. Authentication System
 Users can register and login. User information is stored in browser local storage.
