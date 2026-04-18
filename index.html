@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeonCrypto | Real-Time Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div class="auth-portal" id="auth-portal">
+        <div class="auth-glass-panel">
+            <div class="logo auth-logo">
+                <i class="ph ph-hexagon-fill"></i>
+                <h1>Neon<span class="highlight">Crypto</span></h1>
+            </div>
+
+            <!-- Choice Screen -->
+            <div id="auth-choice-screen">
+                <h2>Welcome to NeonCrypto</h2>
+                <p>Choose an option below to enter the terminal.</p>
+                <div class="auth-buttons">
+                    <button class="primary-btn" id="btn-goto-login">Existing User</button>
+                    <button class="secondary-btn" id="btn-goto-register">New User</button>
+                </div>
+            </div>
+
+            <!-- Login Screen -->
+            <div id="auth-login-screen" class="hidden">
+                <h2>Welcome Back!</h2>
+                <p>Login to your encrypted account</p>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="login-email" placeholder="you@crypto.io" />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login-password" placeholder="••••••••" />
+                </div>
+                <p class="error-msg hidden" id="login-error">Invalid credentials.</p>
+                <button class="primary-btn auth-submit" id="btn-submit-login">Access Portal</button>
+                <button class="text-btn auth-back" data-target="choice"><i class="ph ph-arrow-left"></i> Back</button>
+            </div>
+
+            <!-- Register Screen -->
+            <div id="auth-register-screen" class="hidden">
+                <h2>Create Account</h2>
+                <p>Join the decentralized future</p>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="reg-name" placeholder="Alex Denton" />
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="reg-email" placeholder="you@crypto.io" />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="reg-password" placeholder="Choose a secure password" />
+                </div>
+                <p class="error-msg hidden" id="reg-error">Please fill all fields.</p>
+                <button class="primary-btn auth-submit" id="btn-submit-register">Register Account</button>
+                <button class="text-btn auth-back" data-target="choice"><i class="ph ph-arrow-left"></i> Back</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container hidden" id="app-container">
+        <!-- Background Effects -->
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+
+        <!-- Sidebar / Header -->
+        <header class="sidebar glass-panel">
+            <div class="logo">
+                <i class="ph ph-hexagon-fill"></i>
+                <h1>Neon<span class="highlight">Crypto</span></h1>
+            </div>
+            <nav id="sidebar-nav">
+                <a href="#" class="nav-link active" data-target="view-dashboard"><i class="ph ph-squares-four"></i>
+                    Dashboard</a>
+                <a href="#" class="nav-link" data-target="view-analytics"><i class="ph ph-chart-line-up"></i>
+                    Analytics</a>
+                <a href="#" class="nav-link" data-target="view-wallet"><i class="ph ph-wallet"></i> Wallet</a>
+                <a href="#" class="nav-link" data-target="view-settings"><i class="ph ph-gear"></i> Settings</a>
+
+                <div class="nav-spacer"
+                    style="margin-top: 30px; border-top: 1px solid var(--panel-border); padding-top: 15px;"></div>
+                <a href="#" class="nav-link" id="toggle-ai-popup"><i class="ph ph-robot"></i> AI Analyst</a>
+            </nav>
+            <div class="sidebar-footer">
+                <p>Status: <span class="status-indicator online"></span> Live</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <h2 id="page-title">Market Overview</h2>
+                <div class="user-profile">
+                    <img src="https://i.pravatar.cc/150?img=11" alt="User" />
+                </div>
+            </header>
+
+            <!-- Dashboard View -->
+            <div class="view-section active" id="view-dashboard">
+                <div class="dashboard-grid" id="crypto-grid">
+                    <!-- Loading Skeleton -->
+                    <div class="crypto-card glass-panel skeleton"></div>
+                    <div class="crypto-card glass-panel skeleton"></div>
+                    <div class="crypto-card glass-panel skeleton"></div>
+                    <div class="crypto-card glass-panel skeleton"></div>
+                    <div class="crypto-card glass-panel skeleton"></div>
+                    <div class="crypto-card glass-panel skeleton"></div>
+                </div>
+            </div>
+
+            <!-- Analytics View -->
+            <div class="view-section hidden" id="view-analytics">
+                <div class="analytics-container glass-panel">
+                    <h3><i class="ph ph-chart-bar"></i> Market Performance (24h %)</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="cryptoChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wallet View -->
+            <div class="view-section hidden" id="view-wallet">
+                <div class="wallet-hero glass-panel">
+                    <h3>Estimated Portfolio Value</h3>
+                    <h1 id="wallet-total-balance">$0.00</h1>
+                    <p class="wallet-pnl" id="wallet-total-pnl">+$0.00 (0.00%)</p>
+                </div>
+
+                <h3 class="section-title">Your Assets</h3>
+                <div class="wallet-list" id="wallet-assets-list">
+                    <!-- Asset items injected via JS -->
+                </div>
+            </div>
+
+            <!-- Settings View -->
+            <div class="view-section hidden" id="view-settings">
+                <div class="settings-grid">
+                    <div class="glass-panel profile-panel">
+                        <img src="https://i.pravatar.cc/150?img=11" alt="Profile Picture" class="settings-avatar">
+                        <h2 id="display-name">Alex Denton</h2>
+                        <p class="role-badge">Pro Trader</p>
+                    </div>
+
+                    <div class="glass-panel settings-form">
+                        <h3><i class="ph ph-user"></i> Profile Details</h3>
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="setting-name" value="Alex Denton" />
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="setting-email" value="alex.denton@crypto.io" />
+                        </div>
+                        <div class="form-group">
+                            <label>Wallet Address</label>
+                            <input type="text" disabled value="0x71C...9A34" />
+                        </div>
+                        <button class="primary-btn" id="save-profile-btn">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- AI Assistant Sidebar -->
+        <aside class="ai-sidebar glass-panel">
+            <div class="ai-header">
+                <h2><i class="ph ph-robot"></i> AI Analyst</h2>
+                <button id="toggle-api-key" title="Set OpenRouter API Key">
+                    <i class="ph ph-key"></i>
+                </button>
+            </div>
+
+            <div class="api-key-container hidden" id="api-key-section">
+                <input type="password" id="openrouter-api-key" placeholder="OpenRouter API Key..." />
+                <button id="save-key-btn">Save</button>
+            </div>
+
+            <div class="chat-history" id="chat-history">
+                <div class="chat-message ai-message">
+                    Hello! I'm your crypto market analyst powered by OpenRouter. Set your API key and ask me about
+                    current trends!
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Ask about the market..." disabled />
+                <button id="send-btn" disabled><i class="ph ph-paper-plane-right"></i></button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Template for Crypto Card -->
+    <template id="crypto-card-template">
+        <div class="crypto-card glass-panel">
+            <div class="card-header">
+                <div class="crypto-title">
+                    <img src="" class="crypto-icon" alt="" />
+                    <div>
+                        <h3 class="crypto-name">Bitcoin</h3>
+                        <span class="crypto-symbol">BTC</span>
+                    </div>
+                </div>
+                <div class="crypto-rank">#1</div>
+            </div>
+            <div class="card-body">
+                <div class="crypto-price">$0.00</div>
+                <div class="crypto-change">0.00%</div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Template for Wallet Asset Item -->
+    <template id="wallet-asset-template">
+        <div class="wallet-asset glass-panel">
+            <div class="asset-info">
+                <img src="" class="wallet-crypto-icon" alt="" />
+                <div>
+                    <h4 class="wallet-crypto-name">Bitcoin</h4>
+                    <span class="wallet-crypto-amount">0.00 BTC</span>
+                </div>
+            </div>
+            <div class="asset-values">
+                <div class="wallet-fiat-value">$0.00</div>
+                <div class="wallet-asset-pnl">+$0.00</div>
+            </div>
+        </div>
+    </template>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
