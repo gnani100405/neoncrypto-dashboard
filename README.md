@@ -11,6 +11,7 @@ Real-time cryptocurrency dashboard with AI analyst, portfolio tracking, and live
 - Live updates using WebSockets
 ---
 ##Technologies Used:
+
 HTML5  
 CSS3 (Glassmorphism UI design)  
 JavaScript (Vanilla JS)  
